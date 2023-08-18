@@ -85,7 +85,8 @@ def filterData(position:np.array, quaternion:np.array):
     
     return positionMedian, quaternionFiltered
 
-def estimatePointToPointError(sourcePoints:np.array, targetPoints:np.array):
+def estimatePointToPointError(sourcePoints:np.array, 
+                              targetPoints:np.array):
     error = []
     for i in range(len(sourcePoints)):
         min_error = float("inf")
@@ -96,7 +97,8 @@ def estimatePointToPointError(sourcePoints:np.array, targetPoints:np.array):
         error.append(min_error)
     return np.array(error)
 
-def pointBasedRegistration(sourcePoints:np.array, targetPoints:np.array):
+def pointBasedRegistration(sourcePoints:np.array, 
+                           targetPoints:np.array):
     src_pointCloud = o3d.geometry.PointCloud()
     src_pointCloud.points = o3d.utility.Vector3dVector(sourcePoints)
     tgt_pointCloud = o3d.geometry.PointCloud()
@@ -180,7 +182,7 @@ def registrationWithoutCorrespondence(sourcePoints:np.array,
             sourceInd.append(inp)
             sourceIndCount.append(np.sum(inp == inp))
         
-        for inp in correspondence.keys():
+        for inp in correspondence.values():
             tgtInd.append(inp[0] if len(inp)!=0 else [])
             targetIndCount.append(len(inp))
         
@@ -211,7 +213,7 @@ def registrationWithoutCorrespondence(sourcePoints:np.array,
             
             allPossibleOutcomes = recursive_combinations(targetIndCount)
             val = [x for x in sourceInd]
-            src_points = sourceInd[val,:]
+            src_points = srcIn[val,:]
             for tgt_combination, outcome in enumerate(allPossibleOutcomes):
                 # tgt_points=[]
                 val1 = []
@@ -225,7 +227,7 @@ def registrationWithoutCorrespondence(sourcePoints:np.array,
                     source2target_tf_min = tf_x2y
         correspondence = {}
     
-    return source2target_tf_min
+    return source2target_tf_min, err
             
             
              

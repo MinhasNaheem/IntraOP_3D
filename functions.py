@@ -152,9 +152,9 @@ def plot_fids(fids):
 
     fig.update_layout(
         scene = dict(
-                        xaxis = dict(nticks=4, range=[-2000,2000],),
-                        yaxis = dict(nticks=4, range=[-2000,2000],),
-                        zaxis = dict(nticks=4, range=[-2000,2000],),
+                        xaxis = dict(nticks=4, range=[-3000,3000],),
+                        yaxis = dict(nticks=4, range=[-3000,3000],),
+                        zaxis = dict(nticks=4, range=[-3000,3000],),
                      ),
                     width=700,
                     margin=dict(r=20, l=10, b=10, t=10))
