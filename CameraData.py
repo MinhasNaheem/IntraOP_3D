@@ -9,6 +9,7 @@ class CameraData():
             self.geometry = []
     
     def GetCameraData(self):
+        data={}
         try:
             url2 = 'http://127.0.0.1:8081/GetCameraData'
             r = requests.get(url2,timeout=0.1)

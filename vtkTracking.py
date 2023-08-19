@@ -58,7 +58,7 @@ rotation_angle = 0.0
 rotation_increment = 5.0
 
 # dicomDir = r'E:\Dataset_New\Cerival_Phantom_Intra-Op3D_09062023\Dataset-2\DICOM\PA0\ST0\SE1'
-dicomDir = r'D:\Navigation\Carm_registration\Dataset-4-20230610T054436Z-001\Dataset-4\DICOM\PA0\ST0\SE1'
+dicomDir = r'D:\Navigation\Carm_registration\Dataset-2\DICOM\PA0\ST0\SE1'
 Ct2vtk_tf = CTtoVTK(dicomDir)
 
 readDicom = vtk.vtkDICOMImageReader()
@@ -127,11 +127,14 @@ def updateData():
         tool2cam_tf = createTransformationMatrix(toolData[1], toolData[0])
         ref2tool_tf = np.linalg.inv(tool2cam_tf) @ ref2cam_tf
         tool2ref_tf = np.linalg.inv(ref2tool_tf)
-        ref2vtk_tf = Ct2vtk_tf @ ref2Ct_tf @ tool2ref_tf
+        tool2vtk_tf = Ct2vtk_tf @ ref2Ct_tf @ tool2ref_tf
+        # tool2vtk_tf = np.identity(4)
+        # tool2vtk_tf[:3,3]=np.array([249.511,249.511,399.375])
+
     
     transform = vtk.vtkTransform()
     if np.linalg.norm(ref2cam_tf) != 0:
-        transform.SetMatrix(list(ref2vtk_tf.ravel()))
+        transform.SetMatrix(list(tool2vtk_tf.ravel()))
     
     transformFilter = vtk.vtkTransformPolyDataFilter()
     transformFilter.SetInputConnection(stlReader.GetOutputPort())
