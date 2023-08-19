@@ -42,6 +42,7 @@ def CTtoVTK(dicomFilesPath:str):
     ImageSpacing = np.array(list(dicomImage.GetSpacing()))
     volumeCT = (ImageDim-1)*ImageSpacing
     CTOrigin = np.array(dicomImage.GetOrigin())
+    
     positionVector = volumeCT + ImageOrient @ CTOrigin
     alteredImageOrient = ImageOrient @ np.array([1,0,0,
                                                     0,-1,0,
