@@ -57,8 +57,8 @@ global rotation_angle, rotation_increment
 rotation_angle = 0.0
 rotation_increment = 5.0
 
-dicomDir = r'E:\Dataset_New\Cerival_Phantom_Intra-Op3D_09062023\Dataset-2\DICOM\PA0\ST0\SE1'
-
+# dicomDir = r'E:\Dataset_New\Cerival_Phantom_Intra-Op3D_09062023\Dataset-2\DICOM\PA0\ST0\SE1'
+dicomDir = r'D:\Navigation\Carm_registration\Dataset-4-20230610T054436Z-001\Dataset-4\DICOM\PA0\ST0\SE1'
 Ct2vtk_tf = CTtoVTK(dicomDir)
 
 readDicom = vtk.vtkDICOMImageReader()
