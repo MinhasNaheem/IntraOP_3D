@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import open3d as o3d
 import plotly
 import plotly.graph_objects as go
+import SimpleITK as sitk
+np.set_printoptions(suppress=True)
 
 # rotate a given set of points
 def rotate_vec(r,p_vec):
@@ -268,3 +270,33 @@ def correspondence(src,tgt,rows_diff=0,plot=True):
     #     plt.show()
 
     return intersec_ip, tf_x2y_minErr, reg_error
+
+def sphere_detect(image):
+    # Threshold the image to identify spheres.
+    thr_image = image > 2500
+
+    # Find the connected components in the thresholded image.
+    stats = sitk.LabelShapeStatisticsImageFilter()
+    stats.Execute(sitk.ConnectedComponent(thr_image))
+
+    # Create a list to store the spheres.
+    spheres = []
+
+    # Iterate over the connected components.
+    for lab in stats.GetLabels():
+        cen = stats.GetCentroid(lab) # Get the center point of the connected component.
+        npix = stats.GetNumberOfPixels(lab) # Get the number of pixels in the connected component.
+
+        # Get the intensity of the connected component.
+        idx = image.TransformPhysicalPointToIndex(cen)
+        intv = image[idx]
+        elong = stats.GetElongation(lab)
+
+        # Check if the connected component is a sphere.
+        if intv > 3000 and elong > 0.5 and elong < 1.5:
+            spheres.append(cen) # Add the connected component to the list of spheres.
+
+        # Save the spheres to a file.
+        np.savetxt("spherical_marker_detection_final.txt", spheres)
+
+    return np.array(spheres)
