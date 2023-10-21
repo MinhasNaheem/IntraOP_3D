@@ -37,11 +37,16 @@ def updateData(toolMarker,refMarker,ax):
             
             distance=np.linalg.norm(vertex_divot[i]-tooltip_position)
             tooltip2vertexdist.append(distance)
-        min_dist_vertex=vertex_divot[np.argmin(tooltip2vertexdist)]
-        min_dist_centre=center_divot[np.argmin(tooltip2vertexdist)]
-        error=np.linalg.norm(tool2ref_tf[:3,3]-min_dist_vertex)
+        vertex=vertex_divot[np.argmin(tooltip2vertexdist)]
+        centre=center_divot[np.argmin(tooltip2vertexdist)]
+        error=np.linalg.norm(tool2ref_tf[:3,3]-vertex)
+        dist_vector=centre-vertex
         print("offset between the vertex and the tool tip",error)
-        ax.quiver(min_dist_vertex[0],min_dist_vertex[1],min_dist_vertex[2],min_dist_centre[0]-min_dist_vertex[0],min_dist_centre[1]-min_dist_vertex[1],min_dist_centre[2]-min_dist_vertex[2])
+        projection=(np.dot(tooltip_position,dist_vector)/np.linalg.norm(dist_vector))*dist_vector
+        error_after_projection=np.linalg.norm(projection-vertex)
+        print("offset after projection",error_after_projection)
+        ax.quiver(vertex[0],vertex[1],vertex[2],centre[0]-vertex[0],centre[1]-vertex[1],centre[2]-vertex[2])
+        ax.quiver(projection[0],projection[1],projection[2],tooltip_position[0]-projection[0],tooltip_position[1]-projection[1],tooltip_position[2]-projection[2])
         
         # print(tool2ref_tf)
 
