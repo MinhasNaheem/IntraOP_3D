@@ -5,8 +5,7 @@ from CameraData import CameraData
 import time
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.animation import FuncAnimation
+
 np.set_printoptions(suppress=True)
 import os
 vertex_divot = np.loadtxt('D:\IntraOP_3D\divot_vertex.txt')
@@ -31,6 +30,8 @@ def updateData(toolMarker,refMarker,ax):
         ref2tool_tf = np.linalg.inv(tool2cam_tf) @ ref2cam_tf
         tool2ref_tf = np.linalg.inv(ref2tool_tf)
         tooltip_position=tool2ref_tf[:3,3]
+        reference_original=np.array([-83.9394,27.6742,56.7004],[-98.1793,67.7947,14.5623],[-18.6323,139.084,-1.74854],[23.069,81.072,71.306])
+        reference_new=
         ax.scatter(tool2ref_tf[0,3],tool2ref_tf[1,3],tool2ref_tf[2,3],c='g', marker='o', label='tool tip position in the divot')
         tooltip2vertexdist = []
         for i in range(len(vertex_divot)):
@@ -46,39 +47,33 @@ def updateData(toolMarker,refMarker,ax):
         # tipRadius=
         # pointOffset = (np.sqrt(2)-1)* tipRadius
         # offsetVector = np.array([pointOffset,0,0])
-        # print("projection/displacement of the tip from the axis of the divot",projection)
+        print("projection",projection)
         ax.quiver(vertex[0],vertex[1],vertex[2],centre[0]-vertex[0],centre[1]-vertex[1],centre[2]-vertex[2])
         
-        # print(tool2ref_tf)
+        
 
 if __name__ == "__main__":
     toolMarker = "11002"
     refMarker = "4321"
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.set_xlabel('X Label')
-    ax.set_ylabel('Y Label')
-    ax.set_zlabel('Z Label')
-    ax.set_xlim3d(0, 15)
-    ax.set_ylim3d(0, 15)
-    ax.set_zlim3d(0, 15)
-    
-    
-    def update(frame):
-        ax.clear()
-        ax.scatter(vertex_divot[:,0], vertex_divot[:,1], vertex_divot[:,2], c='b', marker='o', label='Vertex Points')
-        ax.scatter(center_divot[:,0], center_divot[:,1], center_divot[:,2], c='r', marker='o', label='Center Points')
+   
+    while True:
+        
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(vertex_divot[:,0],vertex_divot[:,1],vertex_divot[:,2],c='b', marker='o', label='Vertex Points')
+        ax.scatter(center_divot[:,0],center_divot[:,1],center_divot[:,2], c='r', marker='o', label='Center Points')
         label_points(vertex_divot, ax)
         label_points(center_divot, ax)
-        updateData(toolMarker, refMarker, ax)
-        
-    
+        updateData(toolMarker,refMarker,ax)
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')    
         ax.legend()
-    
-    ani = FuncAnimation(fig, update, frames=100, interval=500)  # Adjust frames and interval as needed
-    plt.show()
-   
+        ax.set_xlim([min(vertex_divot[:, 0]), max(vertex_divot[:, 0])])
+        ax.set_ylim([min(vertex_divot[:, 1]), max(vertex_divot[:, 1])])
+        ax.set_zlim([min(vertex_divot[:, 2]), max(vertex_divot[:, 2])])
         
-        
-
+        plt.show()
+        # plt.pause(5)
+        # plt.close()
+        time.sleep(0.5)
